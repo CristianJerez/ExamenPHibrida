@@ -8,6 +8,7 @@ import { Capacitor } from '@capacitor/core';
 })
 export class AvisosService {
 
+
   sqlite: SQLiteConnection = new SQLiteConnection(CapacitorSQLite)
   db!: SQLiteDBConnection
   plataform: string = ""
@@ -16,14 +17,14 @@ export class AvisosService {
   DB_MODE: string = "no-encryption"
   DB_VERSION: number = 1
   DB_READ_ONLY: boolean = false
-  TABLE_NAME:string = "lista_avisos"
-  DB_SQL_TABLAS: string   = `
+  TABLE_NAME: string = "lista_avisos"
+  DB_SQL_TABLAS: string = `
   CREATE TABLE IF NOT EXISTS ${this.TABLE_NAME}(
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
     titulo TEXT NOT NULL,
     foto TEXT NOT NULL,
     descripcion TEXT NOT NULL,
-    
+    fechaAviso DATE NOT NULL
   );`
 
   constructor() { }
@@ -47,35 +48,37 @@ export class AvisosService {
 
   //CONEXIÓN - SQLITE
   async abrirConexion() {
-  const ret = await this.sqlite.checkConnectionsConsistency()
-  const isConn = (await this.sqlite.isConnection(this.DB_NAME, this.DB_READ_ONLY)).result
-  if (ret.result && isConn) {
-    this.db = await this.sqlite.retrieveConnection(this.DB_NAME, this.DB_READ_ONLY)
-  } else {
-    this.db = await this.sqlite.createConnection(
-      this.DB_NAME,
-      this.DB_ENCRIPTADA,
-      this.DB_MODE,
-      this.DB_VERSION,
-      this.DB_READ_ONLY
-    )
+    const ret = await this.sqlite.checkConnectionsConsistency()
+    const isConn = (await this.sqlite.isConnection(this.DB_NAME, this.DB_READ_ONLY)).result
+    if (ret.result && isConn) {
+      this.db = await this.sqlite.retrieveConnection(this.DB_NAME, this.DB_READ_ONLY)
+    } else {
+      this.db = await this.sqlite.createConnection(
+        this.DB_NAME,
+        this.DB_ENCRIPTADA,
+        this.DB_MODE,
+        this.DB_VERSION,
+        this.DB_READ_ONLY
+      )
+    }
+    await this.db.open()
   }
-  await this.db.open()
-}
 
-async agregarAviso(a: Aviso) {
-  const sql = `INSERT INTO ${this.TABLE_NAME}(titulo, foto, descripcion) VALUES (?,?,?)`
-  await this.db.run(sql, [a.titulo, a.foto, a.descripcion])
-}
-
-async mostrarAvisos(): Promise<Aviso[]> {
-  const sql = `SELECT * FROM ${this.TABLE_NAME}`
-  const resultado = await this.db.query(sql)
-  return resultado?.values ?? []
-}
-
-async borrarAviso(avisosID: number) {
-  const sql = `DELETE FROM ${this.TABLE_NAME} WHERE ID =?`
-  await this.db.run(sql, [avisosID])
+  async agregarAviso(a: Aviso) {
+    const sql = `INSERT INTO ${this.TABLE_NAME}(titulo, foto, descripcion,
+       fechaAviso) VALUES (?,?,?,DATE('now'))`
+    await this.db.run(sql, [a.titulo, a.foto, a.descripcion])
   }
+
+  async mostrarAvisos(): Promise<Aviso[]> {
+    const sql = `SELECT * FROM ${this.TABLE_NAME}`
+    const resultado = await this.db.query(sql)
+    return resultado?.values ?? []
+  }
+
+  async borrarAviso(avisosID: number) {
+    const sql = `DELETE FROM ${this.TABLE_NAME} WHERE ID =?`
+    await this.db.run(sql, [avisosID])
+  }
+
 }

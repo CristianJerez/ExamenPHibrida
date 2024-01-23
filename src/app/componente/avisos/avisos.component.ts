@@ -31,10 +31,12 @@ export class AvisosComponent implements OnInit {
   async _actualizar() {
     this.listaAvisos = await this.avisosService.mostrarAvisos()
   }
-  
+
   async onCreateAviso($event: Aviso) {
-    const aviso:Aviso = {ID:1, titulo: $event.titulo, foto:$event.foto, 
-      descripcion:$event.descripcion, /*fechaAviso: $event.fechaAviso*/}
+    const aviso: Aviso = {
+      ID: 1, titulo: $event.titulo, foto: $event.foto,
+      descripcion: $event.descripcion, fechaAviso: $event.fechaAviso
+    }
     await this.avisosService.agregarAviso(aviso)
     await this._actualizar()
   }

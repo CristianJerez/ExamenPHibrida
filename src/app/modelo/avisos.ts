@@ -2,7 +2,7 @@ export interface Aviso {
 
     ID: number
     titulo: string
-    foto: string
+    foto?: string
     descripcion: string
-    //fechaAviso: string
+    fechaAviso?: Date
 }

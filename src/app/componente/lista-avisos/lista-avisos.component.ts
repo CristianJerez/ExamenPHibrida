@@ -4,7 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { AvisosService } from 'src/app/servicio/avisos.service';
-//import { format } from 'date-fns';
+import { ModalController } from '@ionic/angular';
+import { ModalComponent } from '../modal/modal.component';
 
 @Component({
   selector: 'app-lista-avisos',
@@ -15,13 +16,14 @@ import { AvisosService } from 'src/app/servicio/avisos.service';
 })
 export class ListaAvisosComponent implements OnInit {
 
-  // // fechaActual: Date = new Date();
   @Input() aviso: Aviso[] = [];
+  id:number = 0
 
   constructor(
-    private avisosService: AvisosService
+    private avisosService: AvisosService,
+    private modalController: ModalController,
+
   ) {
-  // this.fechaActual = format(new Date(), 'dd/MM/yyyy');
   }
 
   ngOnInit() { }
@@ -30,10 +32,27 @@ export class ListaAvisosComponent implements OnInit {
     this.aviso = await this.avisosService.mostrarAvisos()
   }
 
-  borrarAviso(ID: number) {
-    this.avisosService.borrarAviso(ID)
-    this.ionViewWillEnter()
-    // this.mensajeList()
+  async borrarAviso(ID: number) {
+    await this.presentDeleteConfirmationModal()
+    this.id = ID
+    await this.ionViewWillEnter()
   }
 
+  async presentDeleteConfirmationModal() {
+    const modal = await this.modalController.create({
+      component: ModalComponent,
+    });
+
+
+    modal.onDidDismiss().then((result) => {
+      
+      if (result.role === 'confirmed') {
+        this.avisosService.borrarAviso(this.id)
+        console.log("entro a if") 
+        location.reload()
+      }
+    });
+    
+    return await modal.present();
+  }
 }

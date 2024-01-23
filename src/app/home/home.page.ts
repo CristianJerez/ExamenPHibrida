@@ -15,22 +15,18 @@ import { ListaAvisosComponent } from '../componente/lista-avisos/lista-avisos.co
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [CommonModule,FormsModule, IonicModule, AvisosComponent, RouterModule, ListaAvisosComponent],
+  imports: [CommonModule, FormsModule, IonicModule, AvisosComponent, RouterModule, ListaAvisosComponent],
 })
-export class HomePage implements OnInit{
+export class HomePage implements OnInit {
 
-  avisos:Aviso[]=[]
+  avisos: Aviso[] = []
   listaAvisos: Aviso[] = []
 
 
   constructor(
-    private avisosService:AvisosService
-    
-  ) {addIcons({addOutline, trashOutline})}
+    private avisosService: AvisosService
 
-  // async ngOnInit() {
-  //   this.avisos = await this.avisosService.mostrarAvisos()
-  // }
+  ) { addIcons({ addOutline, trashOutline }) }
 
   async ngOnInit() {
     await this.avisosService.iniciarPlugin()
@@ -41,4 +37,7 @@ export class HomePage implements OnInit{
     this.listaAvisos = await this.avisosService.mostrarAvisos()
   }
 
+  async ionViewWillEnter() {
+    this.listaAvisos = await this.avisosService.mostrarAvisos()
+  }
 }
