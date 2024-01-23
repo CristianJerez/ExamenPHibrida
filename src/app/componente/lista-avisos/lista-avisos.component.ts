@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { AvisosService } from 'src/app/servicio/avisos.service';
-import { format } from 'date-fns';
+//import { format } from 'date-fns';
 
 @Component({
   selector: 'app-lista-avisos',
@@ -15,13 +15,13 @@ import { format } from 'date-fns';
 })
 export class ListaAvisosComponent implements OnInit {
 
-  fechaActual:string
-  @Input() aviso: Aviso[] = []
+  // // fechaActual: Date = new Date();
+  @Input() aviso: Aviso[] = [];
 
   constructor(
     private avisosService: AvisosService
   ) {
-  this.fechaActual = format(new Date(), 'dd/MM/yyyy');
+  // this.fechaActual = format(new Date(), 'dd/MM/yyyy');
   }
 
   ngOnInit() { }

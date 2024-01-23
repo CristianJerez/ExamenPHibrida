@@ -24,7 +24,7 @@ export class FormularioAvisoComponent  implements OnInit {
 
   onClick(){
     var aviso:Aviso = ({ID: 1, titulo:this.tituloStr, foto:this.fotoStr, 
-      descripcion:this.descripcionStr, fechaAviso: "" })
+      descripcion:this.descripcionStr/*, fechaAviso: ""*/ })
     this.onCreate.emit(aviso)
   }
 

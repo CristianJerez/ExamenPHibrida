@@ -23,7 +23,7 @@ export class AvisosService {
     titulo TEXT NOT NULL,
     foto TEXT NOT NULL,
     descripcion TEXT NOT NULL,
-    fechaAviso TEXT NOT NULL
+    
   );`
 
   constructor() { }

@@ -4,5 +4,5 @@ export interface Aviso {
     titulo: string
     foto: string
     descripcion: string
-    fechaAviso: string
+    //fechaAviso: string
 }
